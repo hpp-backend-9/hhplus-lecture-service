@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    # 로컬에서 TCP 모드로 hhplus_lecture 데이터베이스에 접근하도록 설정
+    # 'MODE=MYSQL' = H2를 MySQL 모드로 동작하도록 설정
+    # 'NON_KEYWORDS=USER' = USER라는 키워드를 예약어로 사용하지 않도록 설정.
+    url: "jdbc:h2:tcp://localhost/~/hhplus_lecture;MODE=MYSQL;NON_KEYWORDS=USER"
+    username: "sa"
+    password: ""
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      # Hibernate가 데이터베이스 스키마에 영향을 주지 않도록 설정 (스키마 변경을 자동으로 수행하지 않음).
+      ddl-auto: none
+    properties:
+      hibernate:
+        # 프로그램 시작 시 쿼리문 출력
+        show_sql: true
+        # 포맷된 형태로 SQL 출력
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        # 브라우저에서 접근 가능하도록
+        web-allow-others: true
