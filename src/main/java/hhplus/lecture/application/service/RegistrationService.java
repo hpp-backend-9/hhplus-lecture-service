@@ -9,6 +9,7 @@ import hhplus.lecture.infrastructure.repository.RegistrationRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class RegistrationService {
@@ -24,16 +25,27 @@ public class RegistrationService {
 
     // 특강 신청 성공 여부
     public boolean registerLecture(String userCode, String lectureCode) {
-        LectureItemEntity entity = lectureItemRepository.findByLectureItemCode(lectureCode);
 
-        if(entity == null || entity.getCurrentCapacity() >= entity.getMaxCapacity()){
+        // 기존 신청 내역 확인
+        List<RegistrationEntity> existingRegistrations = registrationRepository.findByUserCode(userCode);
+
+        boolean alreadyRegistered = existingRegistrations.stream()
+                .anyMatch(registration -> registration.getLectureItemCode().equals(lectureCode));
+
+        if (alreadyRegistered) {
+            return false; // 이미 신청한 강의인 경우
+        }
+
+        LectureItemEntity lectureItem = lectureItemRepository.findByLectureItemCode(lectureCode);
+
+        if(lectureItem == null || lectureItem.getCurrentCapacity() >= lectureItem.getMaxCapacity()){
             return false;
         }
 
         // 신청자수 증가
-        entity.addRegistration();
+        lectureItem.addRegistration();
         // 강의 수강자에 추가
-        lectureItemRepository.save(entity);
+        lectureItemRepository.save(lectureItem);
         // 신청 내역에 추가
         saveRegistration(userCode, lectureCode);
 
