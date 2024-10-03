@@ -81,8 +81,8 @@ class LectureServiceTest {
         when(lectureRepository.findAll()).thenReturn(lectureEntities);
 
         // LectureItemEntity
-        LectureItemEntity lectureItem1 = new LectureItemEntity("LE001", LocalDate.now(), 30, 0);
-        LectureItemEntity lectureItem2 = new LectureItemEntity("LE002", LocalDate.now(), 30, 0);
+        LectureItemEntity lectureItem1 = new LectureItemEntity("LE001", "LE001", LocalDate.now(), 30, 0);
+        LectureItemEntity lectureItem2 = new LectureItemEntity("LE002", "LE001", LocalDate.now(), 30, 0);
         when(lectureItemRepository.findByLectureItemCode("LE001")).thenReturn(lectureItem1);
         when(lectureItemRepository.findByLectureItemCode("LE002")).thenReturn(lectureItem2);
 
@@ -102,5 +102,30 @@ class LectureServiceTest {
         assertThat(result.get(0).getInstructorName()).isEqualTo("이석범");
         assertThat(result.get(1).getLectureCode()).isEqualTo("LE002");
         assertThat(result.get(1).getInstructorName()).isEqualTo("렌");
+    }
+
+    @Test
+    void 날짜별_현재_신청가능한_특강_목록_조회(){
+        // given : 특정 날짜 설정, 강의 목록 세팅
+        LocalDate targetDate = LocalDate.of(2024,10,3);
+
+        // 특강 목록
+        LectureItemEntity lectureItem1 = new LectureItemEntity("LE001", "LE001",targetDate, 30, 1);
+        LectureItemEntity lectureItem2 = new LectureItemEntity("LE002", "LE002",targetDate, 30, 30);
+
+        when(lectureItemRepository.findAllByLectureDate(targetDate)).thenReturn(List.of(lectureItem1, lectureItem2));
+
+        // 특강 상세 설정
+        when(lectureRepository.findByLectureCode("LE001")).thenReturn(new LectureEntity("LE001", "JAVA", "IN001"));
+
+        // 강사 설정
+        when(instructorRepository.findByInstructorCode("IN001")).thenReturn(new InstructorEntity("IN001", "이석범"));
+        
+        // when : 특강 조회
+        List<LectureDto> availableLectures = lectureService.getAvailableLecturesByDate(targetDate);
+
+        // then : 신청 가능한 강의 목록 확인
+        assertThat(availableLectures).hasSize(1);
+        assertThat(availableLectures).extracting("lectureItemCode").containsExactly("LE001");
     }
 }

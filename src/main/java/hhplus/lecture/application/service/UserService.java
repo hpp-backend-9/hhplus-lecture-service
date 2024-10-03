@@ -7,7 +7,6 @@ import hhplus.lecture.infrastructure.persistence.UserEntity;
 import hhplus.lecture.infrastructure.repository.*;
 import hhplus.lecture.interfaces.dto.lecture.LectureDto;
 import hhplus.lecture.interfaces.dto.user.UserResponseDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +17,11 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UsersRepository usersRepository;
-    private RegistrationRepository registrationRepository;
-    private LectureRepository lectureRepository;
-    private LectureItemRepository lectureItemRepository;
-    private LectureService lectureService;
-    private InstructorRepository instructorRepository;
+    private final RegistrationRepository registrationRepository;
+    private final LectureRepository lectureRepository;
+    private final LectureItemRepository lectureItemRepository;
+    private final LectureService lectureService;
+    private final InstructorRepository instructorRepository;
 
     // 사용자 조회 (사용자 상세정보 + 강의 신청 내역)
     public UserResponseDto getUserAndRegisteredLectures(String userCode) {
@@ -47,10 +46,12 @@ public class UserService {
     }
 
     // 생성자
-    public UserService(UsersRepository usersRepository, RegistrationRepository registrationRepository, LectureService lectureService, InstructorRepository instructorRepository) {
+    public UserService(UsersRepository usersRepository, RegistrationRepository registrationRepository, LectureService lectureService, InstructorRepository instructorRepository, LectureRepository lectureRepository, LectureItemRepository lectureItemRepository) {
         this.usersRepository = usersRepository;
         this.registrationRepository = registrationRepository;
         this.lectureService = lectureService;
         this.instructorRepository = instructorRepository;
+        this.lectureRepository = lectureRepository;
+        this.lectureItemRepository = lectureItemRepository;
     }
 }
