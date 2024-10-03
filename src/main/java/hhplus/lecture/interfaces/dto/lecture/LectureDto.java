@@ -1,7 +1,7 @@
 package hhplus.lecture.interfaces.dto.lecture;
 
-import hhplus.lecture.infrastructure.persistence.LectureEntity;
-import hhplus.lecture.infrastructure.persistence.LectureItemEntity;
+import hhplus.lecture.domain.LectureEntity;
+import hhplus.lecture.domain.LectureItemEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

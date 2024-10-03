@@ -1,6 +1,6 @@
 package hhplus.lecture.infrastructure.repository;
 
-import hhplus.lecture.infrastructure.persistence.LectureEntity;
+import hhplus.lecture.domain.LectureEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LectureRepository extends JpaRepository<LectureEntity, Long> {

@@ -1,6 +1,5 @@
-package hhplus.lecture.infrastructure.persistence;
+package hhplus.lecture.domain;
 
-import hhplus.lecture.domain.model.Instructor;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,21 +24,5 @@ public class InstructorEntity {
     public InstructorEntity(String instructorCode, String instructorName) {
         this.instructorCode = instructorCode;
         this.instructorName = instructorName;
-    }
-
-    // 도메인 모델로 변환
-    public Instructor toDomain() {
-        return new Instructor(
-                instructorCode,
-                instructorName
-        );
-    }
-
-    // 도메인 모델에서 엔티티로 변환하는 정적 메서드
-    public static InstructorEntity fromDomain(Instructor instructor) {
-        return new InstructorEntity(
-                instructor.getInstructorCode(),
-                instructor.getInstructorName()
-        );
     }
 }

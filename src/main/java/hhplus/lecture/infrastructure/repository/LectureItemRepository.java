@@ -1,6 +1,6 @@
 package hhplus.lecture.infrastructure.repository;
 
-import hhplus.lecture.infrastructure.persistence.LectureItemEntity;
+import hhplus.lecture.domain.LectureItemEntity;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;

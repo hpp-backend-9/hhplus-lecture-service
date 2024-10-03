@@ -1,7 +1,7 @@
 package hhplus.lecture.application.service;
 
+import hhplus.lecture.domain.*;
 import hhplus.lecture.domain.model.RegistrationStatus;
-import hhplus.lecture.infrastructure.persistence.*;
 import hhplus.lecture.infrastructure.repository.*;
 import hhplus.lecture.interfaces.dto.user.UserResponseDto;
 import org.junit.jupiter.api.Test;

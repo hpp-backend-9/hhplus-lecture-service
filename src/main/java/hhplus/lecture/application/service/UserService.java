@@ -1,9 +1,9 @@
 package hhplus.lecture.application.service;
 
-import hhplus.lecture.infrastructure.persistence.LectureEntity;
-import hhplus.lecture.infrastructure.persistence.LectureItemEntity;
-import hhplus.lecture.infrastructure.persistence.RegistrationEntity;
-import hhplus.lecture.infrastructure.persistence.UserEntity;
+import hhplus.lecture.domain.LectureEntity;
+import hhplus.lecture.domain.LectureItemEntity;
+import hhplus.lecture.domain.RegistrationEntity;
+import hhplus.lecture.domain.UserEntity;
 import hhplus.lecture.infrastructure.repository.*;
 import hhplus.lecture.interfaces.dto.lecture.LectureDto;
 import hhplus.lecture.interfaces.dto.user.UserResponseDto;
@@ -20,7 +20,6 @@ public class UserService {
     private final RegistrationRepository registrationRepository;
     private final LectureRepository lectureRepository;
     private final LectureItemRepository lectureItemRepository;
-    private final LectureService lectureService;
     private final InstructorRepository instructorRepository;
 
     // 사용자 조회 (사용자 상세정보 + 강의 신청 내역)
@@ -35,9 +34,7 @@ public class UserService {
         // 강의 내역
         List<LectureDto> registeredLectures = registrations.stream()
                 .map(registration -> {
-                    // lectureItemCode를 통해 LectureItemEntity를 가져옵니다.
                     LectureItemEntity lectureItem = lectureItemRepository.findByLectureItemCode(registration.getLectureItemCode());
-                    // LectureEntity를 통해 LectureDto 생성
                     LectureEntity lectureEntity = lectureRepository.findByLectureCode(lectureItem.getLectureItemCode());
                     String instructorName = instructorRepository.findByInstructorCode(lectureEntity.getInstructorCode()).getInstructorName();
                     return LectureDto.fromEntity(lectureEntity, lectureItem, instructorName);
@@ -46,10 +43,9 @@ public class UserService {
     }
 
     // 생성자
-    public UserService(UsersRepository usersRepository, RegistrationRepository registrationRepository, LectureService lectureService, InstructorRepository instructorRepository, LectureRepository lectureRepository, LectureItemRepository lectureItemRepository) {
+    public UserService(UsersRepository usersRepository, RegistrationRepository registrationRepository, InstructorRepository instructorRepository, LectureRepository lectureRepository, LectureItemRepository lectureItemRepository) {
         this.usersRepository = usersRepository;
         this.registrationRepository = registrationRepository;
-        this.lectureService = lectureService;
         this.instructorRepository = instructorRepository;
         this.lectureRepository = lectureRepository;
         this.lectureItemRepository = lectureItemRepository;

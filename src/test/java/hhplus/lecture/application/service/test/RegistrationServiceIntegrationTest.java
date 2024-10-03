@@ -1,7 +1,7 @@
 package hhplus.lecture.application.service.test;
 
 import hhplus.lecture.application.service.RegistrationService;
-import hhplus.lecture.infrastructure.persistence.LectureItemEntity;
+import hhplus.lecture.domain.LectureItemEntity;
 import hhplus.lecture.infrastructure.repository.LectureItemRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;

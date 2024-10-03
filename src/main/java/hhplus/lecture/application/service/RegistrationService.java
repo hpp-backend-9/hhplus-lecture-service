@@ -1,9 +1,8 @@
 package hhplus.lecture.application.service;
 
-import hhplus.lecture.domain.model.Lecture;
 import hhplus.lecture.domain.model.RegistrationStatus;
-import hhplus.lecture.infrastructure.persistence.LectureItemEntity;
-import hhplus.lecture.infrastructure.persistence.RegistrationEntity;
+import hhplus.lecture.domain.LectureItemEntity;
+import hhplus.lecture.domain.RegistrationEntity;
 import hhplus.lecture.infrastructure.repository.LectureItemRepository;
 import hhplus.lecture.infrastructure.repository.RegistrationRepository;
 import org.springframework.stereotype.Service;
@@ -16,14 +15,8 @@ import java.util.List;
 @Transactional
 public class RegistrationService {
 
-    private final LectureService lectureService;
     private final LectureItemRepository lectureItemRepository;
     private final RegistrationRepository registrationRepository;
-
-    // 특강 정보 조회
-    public Lecture lectureDetail(String lectureCode){
-        return lectureService.getLecture(lectureCode);
-    }
 
     // 특강 신청 성공 여부
     public boolean registerLecture(String userCode, String lectureItemCode) {
@@ -65,8 +58,7 @@ public class RegistrationService {
     }
 
     // 생성자
-    public RegistrationService(LectureService lectureService, LectureItemRepository lectureItemRepository, RegistrationRepository registrationRepository) {
-        this.lectureService = lectureService;
+    public RegistrationService(LectureItemRepository lectureItemRepository, RegistrationRepository registrationRepository) {
         this.lectureItemRepository = lectureItemRepository;
         this.registrationRepository = registrationRepository;
     }

@@ -16,8 +16,8 @@ public class LectureController {
     // 특강 목록 구현
     @GetMapping
     public ResponseEntity<List<LectureDto>> getLectures() {
-        List<LectureDto> lectureDtos = lectureService.getAllLectures();
-        return ResponseEntity.ok(lectureDtos);
+        List<LectureDto> lectureDto = lectureService.getAllLectures();
+        return ResponseEntity.ok(lectureDto);
     }
 
     // 신청 가능한 특강 목록

@@ -1,5 +1,6 @@
-package hhplus.lecture.domain.model;
+package hhplus.lecture.domain;
 
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,21 +8,34 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 /**
- * 강의 일정과 관련된 정보
+ * 강의 일정 정보
  */
+@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LectureItem {
+@Table(name = "lecture_item")
+public class LectureItemEntity {
 
-    private Long lectureItemId; // 고유 식별자
-    private String lectureItemCode; // 일정 고유 코드
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long lectureItemId; // 자동 증가하는 ID (기본 키)
+
+    @Column(nullable = false, unique = true, length = 10)
+    private String lectureItemCode;
+
+    @Column(nullable = false)
     private String lectureCode;
+
+    @Column(nullable = false)
     private LocalDate lectureDate; // 강의 일정 날짜
+
+    @Column(nullable = false)
     private int maxCapacity = 30; // 정원
+
+    @Column(nullable = false)
     private int currentCapacity = 0; // 현재 신청자 수
 
-    // 특강 신청 가능 여부 확인 (정원 확인)
-    public LectureItem(String lectureItemCode, String lectureCode, LocalDate lectureDate, int maxCapacity, int currentCapacity) {
+    public LectureItemEntity(String lectureItemCode, String lectureCode, LocalDate lectureDate, int maxCapacity, int currentCapacity) {
         this.lectureItemCode = lectureItemCode;
         this.lectureCode = lectureCode;
         this.lectureDate = lectureDate;

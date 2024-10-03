@@ -1,6 +1,6 @@
 package hhplus.lecture.infrastructure.repository;
 
-import hhplus.lecture.infrastructure.persistence.RegistrationEntity;
+import hhplus.lecture.domain.RegistrationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

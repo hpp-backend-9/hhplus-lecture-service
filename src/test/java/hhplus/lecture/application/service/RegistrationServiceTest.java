@@ -1,8 +1,8 @@
 package hhplus.lecture.application.service;
 
 import hhplus.lecture.domain.model.RegistrationStatus;
-import hhplus.lecture.infrastructure.persistence.LectureItemEntity;
-import hhplus.lecture.infrastructure.persistence.RegistrationEntity;
+import hhplus.lecture.domain.LectureItemEntity;
+import hhplus.lecture.domain.RegistrationEntity;
 import hhplus.lecture.infrastructure.repository.LectureItemRepository;
 import hhplus.lecture.infrastructure.repository.RegistrationRepository;
 import org.junit.jupiter.api.Test;

@@ -1,12 +1,11 @@
 package hhplus.lecture.application.service;
 
-import hhplus.lecture.domain.model.Lecture;
-import hhplus.lecture.infrastructure.persistence.InstructorEntity;
-import hhplus.lecture.infrastructure.persistence.LectureItemEntity;
+import hhplus.lecture.domain.InstructorEntity;
+import hhplus.lecture.domain.LectureItemEntity;
 import hhplus.lecture.infrastructure.repository.InstructorRepository;
 import hhplus.lecture.infrastructure.repository.LectureItemRepository;
 import hhplus.lecture.infrastructure.repository.LectureRepository;
-import hhplus.lecture.infrastructure.persistence.LectureEntity;
+import hhplus.lecture.domain.LectureEntity;
 import hhplus.lecture.interfaces.dto.lecture.LectureDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,7 +61,7 @@ class LectureServiceTest {
         when(lectureRepository.findByLectureCode(lectureCode)).thenReturn(lectureEntity);
 
         // when : 특강 조회
-        Lecture result = lectureService.getLecture(lectureCode);
+        LectureEntity result = lectureService.getLecture(lectureCode);
 
         // then : 조회된 특강 정보가 원하는 특강 정보와 일치하는지 확인
         assertThat(result).isNotNull();
