@@ -1,7 +1,7 @@
 package hhplus.lecture.application.service;
 
-import hhplus.lecture.domain.model.LectureItem;
 import hhplus.lecture.domain.model.RegistrationStatus;
+import hhplus.lecture.infrastructure.persistence.LectureItemEntity;
 import hhplus.lecture.infrastructure.repository.LectureItemRepository;
 import hhplus.lecture.infrastructure.repository.RegistrationRepository;
 import org.junit.jupiter.api.Test;
@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -32,7 +34,7 @@ class RegistrationServiceTest {
         // given : 정원이 초과된 특강 세팅
         String lectureItemCode = "LE001";
         String userCode = "00001";
-        LectureItem lectureItem = new LectureItem(lectureItemCode,30,30);
+        LectureItemEntity lectureItem = new LectureItemEntity(lectureItemCode,LocalDate.parse("2024-10-05"),30,30);
         when(lectureItemRepository.findByLectureItemCode(lectureItemCode)).thenReturn(lectureItem);
 
         // when : 특강을 신청한다
@@ -47,7 +49,7 @@ class RegistrationServiceTest {
         // given : 정원이 초과되지 않은 특강 세팅
         String lectureItemCode = "LE001";
         String userCode = "00001";
-        LectureItem lectureItem = new LectureItem(lectureItemCode,30,20);
+        LectureItemEntity lectureItem = new LectureItemEntity(lectureItemCode, LocalDate.parse("2024-10-05"),30,20);
         when(lectureItemRepository.findByLectureItemCode(lectureItemCode)).thenReturn(lectureItem);
 
         // when : 특강을 신청한다

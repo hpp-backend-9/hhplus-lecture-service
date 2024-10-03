@@ -1,10 +1,10 @@
 package hhplus.lecture.infrastructure.repository;
 
-import hhplus.lecture.domain.model.LectureItem;
+import hhplus.lecture.infrastructure.persistence.LectureItemEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LectureItemRepository extends JpaRepository<LectureItem, Long> {
+public interface LectureItemRepository extends JpaRepository<LectureItemEntity, Long> {
 
     // 특강 정보
-    LectureItem findByLectureItemCode(String LectureCode);
+    LectureItemEntity findByLectureItemCode(String LectureCode);
 }

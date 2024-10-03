@@ -1,9 +1,10 @@
 package hhplus.lecture.infrastructure.repository;
 
-import hhplus.lecture.domain.model.Instructor;
+import hhplus.lecture.infrastructure.persistence.InstructorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface InstructorRepository extends JpaRepository<Instructor, Long> {
+public interface InstructorRepository extends JpaRepository<InstructorEntity, Long> {
+
     // 코드번호로 강사 조회
-    Instructor findByInstructorCode(String instructorCode);
+    InstructorEntity findByInstructorCode(String instructorCode);
 }

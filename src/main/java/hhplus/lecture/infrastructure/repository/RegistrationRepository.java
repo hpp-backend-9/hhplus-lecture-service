@@ -1,12 +1,12 @@
 package hhplus.lecture.infrastructure.repository;
 
-import hhplus.lecture.domain.model.Registration;
+import hhplus.lecture.infrastructure.persistence.RegistrationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface RegistrationRepository extends JpaRepository<Registration, Long> {
+public interface RegistrationRepository extends JpaRepository<RegistrationEntity, Long> {
 
     // 사용자의 특강 신청 정보 목록 조회
-    List<Registration> findByUserCode(String userCode);
+    List<RegistrationEntity> findByUserCode(String userCode);
 }

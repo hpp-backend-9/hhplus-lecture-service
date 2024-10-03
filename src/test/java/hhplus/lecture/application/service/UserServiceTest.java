@@ -1,9 +1,9 @@
 package hhplus.lecture.application.service;
 
 import hhplus.lecture.domain.model.Lecture;
-import hhplus.lecture.domain.model.Registration;
 import hhplus.lecture.domain.model.RegistrationStatus;
-import hhplus.lecture.domain.model.User;
+import hhplus.lecture.infrastructure.persistence.RegistrationEntity;
+import hhplus.lecture.infrastructure.persistence.UserEntity;
 import hhplus.lecture.infrastructure.repository.RegistrationRepository;
 import hhplus.lecture.infrastructure.repository.UsersRepository;
 import hhplus.lecture.interfaces.dto.user.UserResponseDto;
@@ -56,13 +56,13 @@ class UserServiceTest {
     void 사용자_조회_시_사용자_정보와_신청한_특강_목록_출력(){
         // given : 사용자 정보 + 신청한 특강 목록 설정
         String userCode = "00001";
-        User user = new User(userCode, "김지혜");
+        UserEntity user = new UserEntity(userCode, "김지혜");
         when(userRepository.findByUserCode(userCode)).thenReturn(user);
 
         // 강의 신청 내역 세팅
-        List<Registration> registrations = new ArrayList<>();
-        registrations.add(new Registration(userCode, "LE001", RegistrationStatus.APPROVAL, LocalDateTime.parse("2024-09-30T09:00:50")));
-        registrations.add(new Registration(userCode, "LE002", RegistrationStatus.APPROVAL, LocalDateTime.parse("2024-10-01T09:00:50")));
+        List<RegistrationEntity> registrations = new ArrayList<>();
+        registrations.add(new RegistrationEntity(userCode, "LE001", RegistrationStatus.APPROVAL, LocalDateTime.parse("2024-09-30T09:00:50")));
+        registrations.add(new RegistrationEntity(userCode, "LE002", RegistrationStatus.APPROVAL, LocalDateTime.parse("2024-10-01T09:00:50")));
         when(registrationRepository.findByUserCode(userCode)).thenReturn(registrations);
 
         // 강의 상세 설정
@@ -84,7 +84,7 @@ class UserServiceTest {
     void 사용자_조회_시_신청한_특강이_없는_경우_빈_목록_반환(){
         // given : 사용자 정보 설정
         String userCode = "00001";
-        User user = new User(userCode, "김지혜");
+        UserEntity user = new UserEntity(userCode, "김지혜");
         when(userRepository.findByUserCode(userCode)).thenReturn(user);
 
         // 강의 신청 내역 없음 설정
