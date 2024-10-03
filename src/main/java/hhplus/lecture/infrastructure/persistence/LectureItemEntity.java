@@ -25,6 +25,9 @@ public class LectureItemEntity {
     private String lectureItemCode;
 
     @Column(nullable = false)
+    private String lectureCode;
+
+    @Column(nullable = false)
     private LocalDate lectureDate; // 강의 일정 날짜
 
     @Column(nullable = false)
@@ -33,8 +36,9 @@ public class LectureItemEntity {
     @Column(nullable = false)
     private int currentCapacity = 0; // 현재 신청자 수
 
-    public LectureItemEntity(String lectureItemCode, LocalDate lectureDate, int maxCapacity, int currentCapacity) {
+    public LectureItemEntity(String lectureItemCode, String lectureCode, LocalDate lectureDate, int maxCapacity, int currentCapacity) {
         this.lectureItemCode = lectureItemCode;
+        this.lectureCode = lectureCode;
         this.lectureDate = lectureDate;
         this.maxCapacity = maxCapacity;
         this.currentCapacity = currentCapacity;
@@ -44,6 +48,7 @@ public class LectureItemEntity {
     public LectureItem toDomain() {
         return new LectureItem(
                 lectureItemCode,
+                lectureCode,
                 lectureDate,
                 maxCapacity,
                 currentCapacity
@@ -54,6 +59,7 @@ public class LectureItemEntity {
     public static LectureItemEntity fromDomain(LectureItem lectureItem) {
         return new LectureItemEntity(
                 lectureItem.getLectureItemCode(),
+                lectureItem.getLectureCode(),
                 lectureItem.getLectureDate(),
                 lectureItem.getMaxCapacity(),
                 lectureItem.getCurrentCapacity()

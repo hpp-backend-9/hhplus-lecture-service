@@ -33,8 +33,9 @@ class RegistrationServiceTest {
     void 정원이_초과된_경우_특강_신청_시_실패한다() {
         // given : 정원이 초과된 특강 세팅
         String lectureItemCode = "LE001";
+        String lectureCode = "LE001";
         String userCode = "00001";
-        LectureItemEntity lectureItem = new LectureItemEntity(lectureItemCode,LocalDate.parse("2024-10-05"),30,30);
+        LectureItemEntity lectureItem = new LectureItemEntity(lectureItemCode,lectureCode, LocalDate.parse("2024-10-05"),30,30);
         when(lectureItemRepository.findByLectureItemCode(lectureItemCode)).thenReturn(lectureItem);
 
         // when : 특강을 신청한다
@@ -48,8 +49,9 @@ class RegistrationServiceTest {
     void 정원이_초과되지_않은_특강_신청_시_성공_후_신청_내역에_저장한다(){
         // given : 정원이 초과되지 않은 특강 세팅
         String lectureItemCode = "LE001";
+        String lectureCode = "LE001";
         String userCode = "00001";
-        LectureItemEntity lectureItem = new LectureItemEntity(lectureItemCode, LocalDate.parse("2024-10-05"),30,20);
+        LectureItemEntity lectureItem = new LectureItemEntity(lectureItemCode, lectureCode, LocalDate.parse("2024-10-05"),30,20);
         when(lectureItemRepository.findByLectureItemCode(lectureItemCode)).thenReturn(lectureItem);
 
         // when : 특강을 신청한다
