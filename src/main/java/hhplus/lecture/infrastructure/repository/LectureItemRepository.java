@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Lock;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface LectureItemRepository extends JpaRepository<LectureItemEntity, String> {
+public interface LectureItemRepository extends JpaRepository<LectureItemEntity, Long> {
 
     // 특강 정보
     @Lock(LockModeType.PESSIMISTIC_WRITE)
