@@ -7,7 +7,6 @@ import hhplus.lecture.infrastructure.persistence.UserEntity;
 import hhplus.lecture.infrastructure.repository.*;
 import hhplus.lecture.interfaces.dto.lecture.LectureDto;
 import hhplus.lecture.interfaces.dto.user.UserResponseDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +17,10 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UsersRepository usersRepository;
-    private RegistrationRepository registrationRepository;
-    private LectureRepository lectureRepository;
-    private LectureItemRepository lectureItemRepository;
-    private LectureService lectureService;
-    private InstructorRepository instructorRepository;
+    private final RegistrationRepository registrationRepository;
+    private final LectureRepository lectureRepository;
+    private final LectureItemRepository lectureItemRepository;
+    private final InstructorRepository instructorRepository;
 
     // 사용자 조회 (사용자 상세정보 + 강의 신청 내역)
     public UserResponseDto getUserAndRegisteredLectures(String userCode) {
@@ -36,9 +34,9 @@ public class UserService {
         // 강의 내역
         List<LectureDto> registeredLectures = registrations.stream()
                 .map(registration -> {
-                    // lectureItemCode를 통해 LectureItemEntity를 가져옵니다.
+                    // lectureItemCode를 이용하여 LectureItemEntity 가지고 오기
                     LectureItemEntity lectureItem = lectureItemRepository.findByLectureItemCode(registration.getLectureItemCode());
-                    // LectureEntity를 통해 LectureDto 생성
+                    // 강사명 가지고 오기
                     LectureEntity lectureEntity = lectureRepository.findByLectureCode(lectureItem.getLectureItemCode());
                     String instructorName = instructorRepository.findByInstructorCode(lectureEntity.getInstructorCode()).getInstructorName();
                     return LectureDto.fromEntity(lectureEntity, lectureItem, instructorName);
@@ -47,10 +45,11 @@ public class UserService {
     }
 
     // 생성자
-    public UserService(UsersRepository usersRepository, RegistrationRepository registrationRepository, LectureService lectureService, InstructorRepository instructorRepository) {
+    public UserService(UsersRepository usersRepository, RegistrationRepository registrationRepository, LectureItemRepository lectureItemRepository,InstructorRepository instructorRepository, LectureRepository lectureRepository) {
         this.usersRepository = usersRepository;
         this.registrationRepository = registrationRepository;
-        this.lectureService = lectureService;
+        this.lectureItemRepository = lectureItemRepository;
         this.instructorRepository = instructorRepository;
+        this.lectureRepository = lectureRepository;
     }
 }

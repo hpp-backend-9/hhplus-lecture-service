@@ -22,7 +22,6 @@ public class LectureDto {
     private LocalDate lectureDate; // 강의 날짜
     private int maxCapacity; // 정원
 
-
     public LectureDto(String lectureCode, String lectureItemCode, String lectureName, String instructorCode, String instructorName, LocalDate lectureDate, int maxCapacity) {
         this.lectureCode = lectureCode;
         this.lectureItemCode = lectureItemCode;

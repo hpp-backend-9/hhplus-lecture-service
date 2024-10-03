@@ -14,13 +14,13 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 자동 증가하는 ID (기본 키)
+    private Long userId;
 
     @Column(nullable = false, unique = true, length = 8)
-    private String userCode; // 사용자 고유 코드 (예: 학번)
+    private String userCode;
 
     @Column(nullable = false, length = 20)
-    private String userName; // 사용자 이름
+    private String userName;
 
     public UserEntity(String userCode, String userName) {
         this.userCode = userCode;
