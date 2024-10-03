@@ -14,19 +14,19 @@ import lombok.NoArgsConstructor;
 public class LectureDto {
     private String lectureCode; // 강의 코드
     private String lectureName; // 강의명
-    private String instructorName; // 강사 이름
+    private String getInstructorCode; // 강사 코드
 
-    public LectureDto(String lectureCode, String lectureName, String instructorName) {
+    public LectureDto(String lectureCode, String lectureName, String getInstructorCode) {
         this.lectureCode = lectureCode;
         this.lectureName = lectureName;
-        this.instructorName = instructorName;
+        this.getInstructorCode = getInstructorCode;
     }
 
     public static LectureDto fromDomain(Lecture lecture) {
         return new LectureDto(
                 lecture.getLectureCode(),
                 lecture.getLectureName(),
-                lecture.getInstructorName()
+                lecture.getInstructorCode()
         );
     }
 
@@ -34,7 +34,7 @@ public class LectureDto {
         return new LectureDto(
                 entity.getLectureCode(),
                 entity.getLectureName(),
-                entity.getInstructorName()
+                entity.getInstructorCode()
         );
     }
 }

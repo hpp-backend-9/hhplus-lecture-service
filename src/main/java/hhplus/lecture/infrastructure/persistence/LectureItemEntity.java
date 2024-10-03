@@ -19,7 +19,7 @@ public class LectureItemEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 자동 증가하는 ID (기본 키)
+    private Long lectureItemId; // 자동 증가하는 ID (기본 키)
 
     @Column(nullable = false, unique = true, length = 10)
     private String lectureItemCode; // 일정 고유 코드

@@ -56,7 +56,7 @@ class LectureServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.getLectureCode()).isEqualTo(lectureCode);
         assertThat(result.getLectureName()).isEqualTo("Java");
-        assertThat(result.getInstructorName()).isEqualTo("IN001");
+        assertThat(result.getInstructorCode()).isEqualTo("IN001");
     }
 
     @Test

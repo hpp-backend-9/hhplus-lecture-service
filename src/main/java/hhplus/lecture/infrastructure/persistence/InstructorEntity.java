@@ -14,9 +14,9 @@ public class InstructorEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 자동 증가하는 ID (기본 키)
+    private Long instructorId; // 자동 증가하는 ID (기본 키)
 
-    @Column(nullable = false, unique = true, length = 10)
+    @Column(nullable = false, length = 10)
     private String instructorCode; // 강사 코드
 
     @Column(nullable = false, length = 20)

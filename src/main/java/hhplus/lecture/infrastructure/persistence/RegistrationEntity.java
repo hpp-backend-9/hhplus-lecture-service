@@ -20,7 +20,7 @@ public class RegistrationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 자동 증가하는 ID (기본 키)
+    private Long registrationId; // 자동 증가하는 ID (기본 키)
 
     @Column(nullable = false, length = 8)
     private String userCode; // 사용자 고유 코드
