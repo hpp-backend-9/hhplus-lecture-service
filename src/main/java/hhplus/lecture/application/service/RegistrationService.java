@@ -7,11 +7,13 @@ import hhplus.lecture.infrastructure.persistence.RegistrationEntity;
 import hhplus.lecture.infrastructure.repository.LectureItemRepository;
 import hhplus.lecture.infrastructure.repository.RegistrationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Transactional
 public class RegistrationService {
 
     private final LectureService lectureService;
