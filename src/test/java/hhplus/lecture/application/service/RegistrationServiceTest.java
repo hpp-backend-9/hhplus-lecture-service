@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -32,13 +32,14 @@ class RegistrationServiceTest {
     @InjectMocks
     private RegistrationService registrationService;
 
+    private final String lectureItemCode = "LE001";
+    private final String lectureCode = "LE001";
+    private final String userCode = "00001";
+
     @Test
     void 정원이_초과된_경우_특강_신청_시_실패한다() {
         // given : 정원이 초과된 특강 세팅
-        String lectureItemCode = "LE001";
-        String lectureCode = "LE001";
-        String userCode = "00001";
-        LectureItemEntity lectureItem = new LectureItemEntity(lectureItemCode,lectureCode, LocalDate.parse("2024-10-05"),30,30);
+        LectureItemEntity lectureItem = new LectureItemEntity(lectureItemCode, lectureCode, LocalDate.parse("2024-10-05"), 30, 30);
         when(lectureItemRepository.findByLectureItemCode(lectureItemCode)).thenReturn(lectureItem);
 
         // when : 특강을 신청한다
@@ -49,12 +50,9 @@ class RegistrationServiceTest {
     }
 
     @Test
-    void 정원이_초과되지_않은_특강_신청_시_성공_후_신청_내역에_저장한다(){
+    void 정원이_초과되지_않은_특강_신청_시_성공_후_신청_내역에_저장한다() {
         // given : 정원이 초과되지 않은 특강 세팅
-        String lectureItemCode = "LE001";
-        String lectureCode = "LE001";
-        String userCode = "00001";
-        LectureItemEntity lectureItem = new LectureItemEntity(lectureItemCode, lectureCode, LocalDate.parse("2024-10-05"),30,20);
+        LectureItemEntity lectureItem = new LectureItemEntity(lectureItemCode, lectureCode, LocalDate.parse("2024-10-05"), 30, 20);
         when(lectureItemRepository.findByLectureItemCode(lectureItemCode)).thenReturn(lectureItem);
 
         // when : 특강을 신청한다
@@ -74,15 +72,8 @@ class RegistrationServiceTest {
     @Test
     void 동일한_신청자는_동일한_강의에_대해_한_번의_수강_신청만_성공해야한다() {
         // given: 특정 강의와 사용자 설정
-        String lectureItemCode = "LE001";
-        String userCode = "00001";
-
-        // 이미 신청한 등록 정보 설정
         RegistrationEntity existingRegistration = new RegistrationEntity(userCode, lectureItemCode, RegistrationStatus.APPROVAL, LocalDateTime.now());
-        List<RegistrationEntity> existingRegistrations = List.of(existingRegistration);
-
-        // mock 설정
-        when(registrationRepository.findByUserCode(userCode)).thenReturn(existingRegistrations);
+        when(registrationRepository.findByUserCode(userCode)).thenReturn(Collections.singletonList(existingRegistration));
 
         // when: 동일한 강의에 대해 다시 신청 시도
         boolean result = registrationService.registerLecture(userCode, lectureItemCode);
@@ -93,5 +84,4 @@ class RegistrationServiceTest {
         // verify: repository의 findByUserCode 메서드가 호출되었는지 확인
         verify(registrationRepository).findByUserCode(userCode);
     }
-
 }
