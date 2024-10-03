@@ -14,7 +14,8 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 public class LectureDto {
-    private String lectureCode; // 강의 코드
+    private String lectureItemCode; // 특정 강의의 세부 사항
+    private String lectureCode; // 전체 강의
     private String lectureName; // 강의명
     private String instructorCode; // 강사 코드
     private String instructorName; // 강사명
@@ -22,7 +23,8 @@ public class LectureDto {
     private int maxCapacity; // 정원
 
 
-    public LectureDto(String lectureCode, String lectureName, String instructorCode, String instructorName, LocalDate lectureDate, int maxCapacity) {
+    public LectureDto(String lectureItemCode, String lectureCode, String lectureName, String instructorCode, String instructorName, LocalDate lectureDate, int maxCapacity) {
+        this.lectureItemCode = lectureItemCode;
         this.lectureCode = lectureCode;
         this.lectureName = lectureName;
         this.instructorCode = instructorCode;
@@ -33,6 +35,7 @@ public class LectureDto {
 
     public static LectureDto fromEntity(LectureEntity entity, LectureItemEntity lectureItem, String instructorName) {
         return new LectureDto(
+                lectureItem.getLectureItemCode(),
                 entity.getLectureCode(),
                 entity.getLectureName(),
                 entity.getInstructorCode(),
