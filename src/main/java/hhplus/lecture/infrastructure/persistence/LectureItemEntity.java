@@ -22,7 +22,7 @@ public class LectureItemEntity {
     private Long lectureItemId; // 자동 증가하는 ID (기본 키)
 
     @Column(nullable = false, unique = true, length = 10)
-    private String lectureItemCode; // 일정 고유 코드
+    private String lectureItemCode;
 
     @Column(nullable = false)
     private LocalDate lectureDate; // 강의 일정 날짜
@@ -44,6 +44,7 @@ public class LectureItemEntity {
     public LectureItem toDomain() {
         return new LectureItem(
                 lectureItemCode,
+                lectureDate,
                 maxCapacity,
                 currentCapacity
         );

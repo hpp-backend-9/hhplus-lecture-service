@@ -26,7 +26,7 @@ public class LectureEntity {
     private String lectureName; // 강의명
 
     @Column(nullable = false, length = 20)
-    private String instructorCode; // 강사 이름
+    private String instructorCode; // 강사 코드
 
     public LectureEntity(String lectureCode, String lectureName, String instructorCode) {
         this.lectureCode = lectureCode;

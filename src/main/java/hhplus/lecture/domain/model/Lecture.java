@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 강의 정보
+ * 강의 정보(기본 정보)
+ * 강의 코드, 강의명, 강사 코드
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,6 +20,6 @@ public class Lecture {
     public Lecture(String lectureCode, String lectureName, String instructorCode) {
         this.lectureCode = lectureCode;
         this.lectureName = lectureName;
-        this.instructorCode = instructorCode;
+        this.instructorCode  = instructorCode;
     }
 }

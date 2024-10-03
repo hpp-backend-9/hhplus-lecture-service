@@ -1,14 +1,20 @@
 package hhplus.lecture.application.service;
 
 import hhplus.lecture.domain.model.Lecture;
+import hhplus.lecture.infrastructure.persistence.InstructorEntity;
+import hhplus.lecture.infrastructure.persistence.LectureItemEntity;
+import hhplus.lecture.infrastructure.repository.InstructorRepository;
+import hhplus.lecture.infrastructure.repository.LectureItemRepository;
 import hhplus.lecture.infrastructure.repository.LectureRepository;
 import hhplus.lecture.infrastructure.persistence.LectureEntity;
+import hhplus.lecture.interfaces.dto.lecture.LectureDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -23,6 +29,12 @@ class LectureServiceTest {
 
     @Mock
     private LectureRepository lectureRepository;
+
+    @Mock
+    private LectureItemRepository lectureItemRepository;
+
+    @Mock
+    private InstructorRepository instructorRepository;
 
     @InjectMocks
     private LectureService lectureService;
@@ -68,13 +80,27 @@ class LectureServiceTest {
         List<LectureEntity> lectureEntities = Arrays.asList(lecture1, lecture2);
         when(lectureRepository.findAll()).thenReturn(lectureEntities);
 
+        // LectureItemEntity
+        LectureItemEntity lectureItem1 = new LectureItemEntity("LE001", LocalDate.now(), 30, 0);
+        LectureItemEntity lectureItem2 = new LectureItemEntity("LE002", LocalDate.now(), 30, 0);
+        when(lectureItemRepository.findByLectureItemCode("LE001")).thenReturn(lectureItem1);
+        when(lectureItemRepository.findByLectureItemCode("LE002")).thenReturn(lectureItem2);
+
+        // 강사 정보 설정
+        InstructorEntity instructor1 = new InstructorEntity("IN001", "이석범");
+        InstructorEntity instructor2 = new InstructorEntity("IN002", "렌");
+        when(instructorRepository.findByInstructorCode("IN001")).thenReturn(instructor1);
+        when(instructorRepository.findByInstructorCode("IN002")).thenReturn(instructor2);
+
         // when : 모든 강의 목록 조회
-        List<Lecture> result = lectureService.getAllLectures();
+        List<LectureDto> result = lectureService.getAllLectures();
 
         // then : 조회된 강의 목록이 예상한 강의 목록과 일치하는지 확인
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(2);
         assertThat(result.get(0).getLectureCode()).isEqualTo("LE001");
+        assertThat(result.get(0).getInstructorName()).isEqualTo("이석범");
         assertThat(result.get(1).getLectureCode()).isEqualTo("LE002");
+        assertThat(result.get(1).getInstructorName()).isEqualTo("렌");
     }
 }

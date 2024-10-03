@@ -1,12 +1,13 @@
 package hhplus.lecture.application.service;
 
-import hhplus.lecture.domain.model.Lecture;
+import hhplus.lecture.infrastructure.persistence.LectureEntity;
+import hhplus.lecture.infrastructure.persistence.LectureItemEntity;
 import hhplus.lecture.infrastructure.persistence.RegistrationEntity;
 import hhplus.lecture.infrastructure.persistence.UserEntity;
-import hhplus.lecture.infrastructure.repository.RegistrationRepository;
-import hhplus.lecture.infrastructure.repository.UsersRepository;
+import hhplus.lecture.infrastructure.repository.*;
 import hhplus.lecture.interfaces.dto.lecture.LectureDto;
 import hhplus.lecture.interfaces.dto.user.UserResponseDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,10 @@ public class UserService {
 
     private final UsersRepository usersRepository;
     private RegistrationRepository registrationRepository;
+    private LectureRepository lectureRepository;
+    private LectureItemRepository lectureItemRepository;
     private LectureService lectureService;
+    private InstructorRepository instructorRepository;
 
     // 사용자 조회 (사용자 상세정보 + 강의 신청 내역)
     public UserResponseDto getUserAndRegisteredLectures(String userCode) {
@@ -32,17 +36,21 @@ public class UserService {
         // 강의 내역
         List<LectureDto> registeredLectures = registrations.stream()
                 .map(registration -> {
-                    Lecture lecture = lectureService.getLecture(registration.getLectureItemCode());
-                    return new LectureDto(lecture.getLectureCode(), lecture.getLectureName(), lecture.getInstructorName());
+                    // lectureItemCode를 통해 LectureItemEntity를 가져옵니다.
+                    LectureItemEntity lectureItem = lectureItemRepository.findByLectureItemCode(registration.getLectureItemCode());
+                    // LectureEntity를 통해 LectureDto 생성
+                    LectureEntity lectureEntity = lectureRepository.findByLectureCode(lectureItem.getLectureItemCode());
+                    String instructorName = instructorRepository.findByInstructorCode(lectureEntity.getInstructorCode()).getInstructorName();
+                    return LectureDto.fromEntity(lectureEntity, lectureItem, instructorName);
                 }).collect(Collectors.toList());
-
         return new UserResponseDto(entity, registeredLectures);
     }
 
     // 생성자
-    public UserService(UsersRepository usersRepository, RegistrationRepository registrationRepository, LectureService lectureService) {
+    public UserService(UsersRepository usersRepository, RegistrationRepository registrationRepository, LectureService lectureService, InstructorRepository instructorRepository) {
         this.usersRepository = usersRepository;
         this.registrationRepository = registrationRepository;
         this.lectureService = lectureService;
+        this.instructorRepository = instructorRepository;
     }
 }

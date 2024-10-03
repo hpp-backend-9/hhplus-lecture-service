@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * 강의 일정과 관련된 정보
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LectureItem {
@@ -17,8 +20,9 @@ public class LectureItem {
     private int currentCapacity = 0; // 현재 신청자 수
 
     // 특강 신청 가능 여부 확인 (정원 확인)
-    public LectureItem(String lectureItemCode, int maxCapacity, int currentCapacity) {
+    public LectureItem(String lectureItemCode, LocalDate lectureDate, int maxCapacity, int currentCapacity) {
         this.lectureItemCode = lectureItemCode;
+        this.lectureDate = lectureDate;
         this.maxCapacity = maxCapacity;
         this.currentCapacity = currentCapacity;
     }

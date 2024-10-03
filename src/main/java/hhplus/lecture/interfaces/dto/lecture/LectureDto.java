@@ -1,9 +1,11 @@
 package hhplus.lecture.interfaces.dto.lecture;
 
-import hhplus.lecture.domain.model.Lecture;
 import hhplus.lecture.infrastructure.persistence.LectureEntity;
+import hhplus.lecture.infrastructure.persistence.LectureItemEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 /**
  * 정보 전달을 위한 DTO
@@ -14,28 +16,29 @@ import lombok.NoArgsConstructor;
 public class LectureDto {
     private String lectureCode; // 강의 코드
     private String lectureName; // 강의명
-    private String getInstructorCode; // 강사 코드
+    private String instructorCode; // 강사 코드
+    private String instructorName; // 강사명
+    private LocalDate lectureDate; // 강의 날짜
+    private int maxCapacity; // 정원
 
-    public LectureDto(String lectureCode, String lectureName, String getInstructorCode) {
+
+    public LectureDto(String lectureCode, String lectureName, String instructorCode, String instructorName, LocalDate lectureDate, int maxCapacity) {
         this.lectureCode = lectureCode;
         this.lectureName = lectureName;
-        this.getInstructorCode = getInstructorCode;
+        this.instructorCode = instructorCode;
+        this.instructorName = instructorName;
+        this.lectureDate = lectureDate;
+        this.maxCapacity = maxCapacity;
     }
 
-    public static LectureDto fromDomain(Lecture lecture) {
-        return new LectureDto(
-                lecture.getLectureCode(),
-                lecture.getLectureName(),
-                lecture.getInstructorCode()
-        );
-    }
-
-    public static LectureDto fromEntity(LectureEntity entity) {
+    public static LectureDto fromEntity(LectureEntity entity, LectureItemEntity lectureItem, String instructorName) {
         return new LectureDto(
                 entity.getLectureCode(),
                 entity.getLectureName(),
-                entity.getInstructorCode()
+                entity.getInstructorCode(),
+                instructorName,
+                lectureItem.getLectureDate(),
+                lectureItem.getMaxCapacity()
         );
     }
 }
-
