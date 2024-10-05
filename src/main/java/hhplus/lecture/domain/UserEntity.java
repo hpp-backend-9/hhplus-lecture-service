@@ -1,6 +1,5 @@
-package hhplus.lecture.infrastructure.persistence;
+package hhplus.lecture.domain;
 
-import hhplus.lecture.domain.model.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,16 +24,5 @@ public class UserEntity {
     public UserEntity(String userCode, String userName) {
         this.userCode = userCode;
         this.userName = userName;
-    }
-
-    public User toDomain() {
-        return new User(userCode, userName);
-    }
-
-    public static UserEntity fromDomain(User user) {
-        return new UserEntity(
-                user.getUserCode(),
-                user.getUserName()
-        );
     }
 }

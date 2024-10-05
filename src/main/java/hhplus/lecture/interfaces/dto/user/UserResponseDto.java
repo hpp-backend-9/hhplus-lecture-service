@@ -1,6 +1,6 @@
 package hhplus.lecture.interfaces.dto.user;
 
-import hhplus.lecture.infrastructure.persistence.UserEntity;
+import hhplus.lecture.domain.UserEntity;
 import hhplus.lecture.interfaces.dto.lecture.LectureDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

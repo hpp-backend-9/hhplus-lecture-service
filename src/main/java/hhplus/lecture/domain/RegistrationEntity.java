@@ -1,6 +1,5 @@
-package hhplus.lecture.infrastructure.persistence;
+package hhplus.lecture.domain;
 
-import hhplus.lecture.domain.model.Registration;
 import hhplus.lecture.domain.model.RegistrationStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -30,7 +29,7 @@ public class RegistrationEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private RegistrationStatus status; // 신청 상태 (WAIT, APPROVAL, REFUSAL)
+    private RegistrationStatus status; // 신청 상태 (APPROVAL, REFUSAL)
 
     @Column(nullable = false)
     private LocalDateTime registrationDate; // 신청 날짜
@@ -40,27 +39,5 @@ public class RegistrationEntity {
         this.lectureItemCode = lectureItemCode;
         this.status = status;
         this.registrationDate = registrationDate;
-    }
-
-    public Registration toDomain() {
-        return new Registration(
-                userCode,
-                lectureItemCode,
-                status,
-                registrationDate
-        );
-    }
-
-    public static RegistrationEntity fromDomain(Registration registration) {
-        return new RegistrationEntity(
-                registration.getUserCode(),
-                registration.getLectureItemCode(),
-                registration.getStatus(),
-                registration.getRegistrationDate()
-        );
-    }
-
-    public void updateStatus(RegistrationStatus status) {
-        this.status = status;
     }
 }

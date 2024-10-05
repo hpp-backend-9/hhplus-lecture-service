@@ -1,55 +1,54 @@
 package hhplus.lecture.application.service;
 
-import hhplus.lecture.domain.model.Lecture;
 import hhplus.lecture.domain.model.RegistrationStatus;
-import hhplus.lecture.infrastructure.persistence.LectureItemEntity;
-import hhplus.lecture.infrastructure.persistence.RegistrationEntity;
+import hhplus.lecture.domain.LectureItemEntity;
+import hhplus.lecture.domain.RegistrationEntity;
 import hhplus.lecture.infrastructure.repository.LectureItemRepository;
 import hhplus.lecture.infrastructure.repository.RegistrationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Transactional
 public class RegistrationService {
 
-    private final LectureService lectureService;
     private final LectureItemRepository lectureItemRepository;
     private final RegistrationRepository registrationRepository;
 
-    // 특강 정보 조회
-    public Lecture lectureDetail(String lectureCode){
-        return lectureService.getLecture(lectureCode);
-    }
-
     // 특강 신청 성공 여부
-    public boolean registerLecture(String userCode, String lectureCode) {
-
+    public boolean registerLecture(String userCode, String lectureItemCode) {
         // 기존 신청 내역 확인
-        List<RegistrationEntity> existingRegistrations = registrationRepository.findByUserCode(userCode);
-
-        boolean alreadyRegistered = existingRegistrations.stream()
-                .anyMatch(registration -> registration.getLectureItemCode().equals(lectureCode));
-
-        if (alreadyRegistered) {
-            return false; // 이미 신청한 강의인 경우
+        if (isAlreadyRegistered(userCode, lectureItemCode)) {
+            return false; // 이미 신청한 경우
         }
 
-        LectureItemEntity lectureItem = lectureItemRepository.findByLectureItemCode(lectureCode);
-
-        if(lectureItem == null || lectureItem.getCurrentCapacity() >= lectureItem.getMaxCapacity()){
-            return false;
+        // 강의 일정 조회
+        LectureItemEntity lectureItem = lectureItemRepository.findByLectureItemCode(lectureItemCode);
+        if (lectureItem == null || !canRegister(lectureItem)) {
+            return false; // 특강 일정이 없거나 정원이 가득 찼다면
         }
 
-        // 신청자수 증가
+        // 신청자 수 증가
         lectureItem.addRegistration();
-        // 강의 수강자에 추가
-        lectureItemRepository.save(lectureItem);
-        // 신청 내역에 추가
-        saveRegistration(userCode, lectureCode);
+        lectureItemRepository.save(lectureItem); // 강의 일정 업데이트
+        saveRegistration(userCode, lectureItemCode); // 신청 내역에 추가
 
         return true;
+    }
+
+    // 기존 신청 내역 확인
+    private boolean isAlreadyRegistered(String userCode, String lectureItemCode) {
+        List<RegistrationEntity> existingRegistrations = registrationRepository.findByUserCode(userCode);
+        return existingRegistrations.stream()
+                .anyMatch(registration -> registration.getLectureItemCode().equals(lectureItemCode));
+    }
+
+    // 등록 가능 여부
+    private boolean canRegister(LectureItemEntity lectureItem) {
+        return lectureItem.getCurrentCapacity() < lectureItem.getMaxCapacity();
     }
 
     // 신청 내역 저장
@@ -59,8 +58,7 @@ public class RegistrationService {
     }
 
     // 생성자
-    public RegistrationService(LectureService lectureService, LectureItemRepository lectureItemRepository, RegistrationRepository registrationRepository) {
-        this.lectureService = lectureService;
+    public RegistrationService(LectureItemRepository lectureItemRepository, RegistrationRepository registrationRepository) {
         this.lectureItemRepository = lectureItemRepository;
         this.registrationRepository = registrationRepository;
     }

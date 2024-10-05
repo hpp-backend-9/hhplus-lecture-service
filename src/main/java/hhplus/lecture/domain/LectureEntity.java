@@ -1,6 +1,5 @@
-package hhplus.lecture.infrastructure.persistence;
+package hhplus.lecture.domain;
 
-import hhplus.lecture.domain.model.Lecture;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,17 +32,4 @@ public class LectureEntity {
         this.lectureName = lectureName;
         this.instructorCode = instructorCode;
     }
-    
-    public Lecture toDomain() {
-        return new Lecture(lectureCode, lectureName, instructorCode);
-    }
-
-    public static LectureEntity fromDomain(Lecture lecture) {
-        return new LectureEntity(
-                lecture.getLectureCode(),
-                lecture.getLectureName(),
-                lecture.getInstructorCode()
-        );
-    }
 }
-

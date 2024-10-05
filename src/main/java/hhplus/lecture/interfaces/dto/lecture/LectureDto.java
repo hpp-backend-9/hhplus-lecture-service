@@ -1,7 +1,7 @@
 package hhplus.lecture.interfaces.dto.lecture;
 
-import hhplus.lecture.infrastructure.persistence.LectureEntity;
-import hhplus.lecture.infrastructure.persistence.LectureItemEntity;
+import hhplus.lecture.domain.LectureEntity;
+import hhplus.lecture.domain.LectureItemEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,18 +14,17 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 public class LectureDto {
-    private String lectureItemCode; // 특정 강의의 세부 사항
-    private String lectureCode; // 전체 강의
+    private String lectureCode; // 강의 코드
+    private String lectureItemCode;
     private String lectureName; // 강의명
     private String instructorCode; // 강사 코드
     private String instructorName; // 강사명
     private LocalDate lectureDate; // 강의 날짜
     private int maxCapacity; // 정원
 
-
-    public LectureDto(String lectureItemCode, String lectureCode, String lectureName, String instructorCode, String instructorName, LocalDate lectureDate, int maxCapacity) {
-        this.lectureItemCode = lectureItemCode;
+    public LectureDto(String lectureCode, String lectureItemCode, String lectureName, String instructorCode, String instructorName, LocalDate lectureDate, int maxCapacity) {
         this.lectureCode = lectureCode;
+        this.lectureItemCode = lectureItemCode;
         this.lectureName = lectureName;
         this.instructorCode = instructorCode;
         this.instructorName = instructorName;
@@ -35,8 +34,8 @@ public class LectureDto {
 
     public static LectureDto fromEntity(LectureEntity entity, LectureItemEntity lectureItem, String instructorName) {
         return new LectureDto(
-                lectureItem.getLectureItemCode(),
                 entity.getLectureCode(),
+                lectureItem.getLectureItemCode(),
                 entity.getLectureName(),
                 entity.getInstructorCode(),
                 instructorName,

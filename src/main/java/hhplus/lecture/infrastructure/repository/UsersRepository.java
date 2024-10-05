@@ -1,6 +1,6 @@
 package hhplus.lecture.infrastructure.repository;
 
-import hhplus.lecture.infrastructure.persistence.UserEntity;
+import hhplus.lecture.domain.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UsersRepository extends CrudRepository<UserEntity, Long> {

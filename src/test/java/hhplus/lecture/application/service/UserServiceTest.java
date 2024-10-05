@@ -1,7 +1,7 @@
 package hhplus.lecture.application.service;
 
+import hhplus.lecture.domain.*;
 import hhplus.lecture.domain.model.RegistrationStatus;
-import hhplus.lecture.infrastructure.persistence.*;
 import hhplus.lecture.infrastructure.repository.*;
 import hhplus.lecture.interfaces.dto.user.UserResponseDto;
 import org.junit.jupiter.api.Test;
@@ -38,23 +38,20 @@ class UserServiceTest {
     @Mock
     private LectureRepository lectureRepository;
 
-    @Mock
-    private LectureService lectureService;
-
     @InjectMocks
     private UserService userService;
 
+    private final String userCode = "UC001";
+    private final String lectureCode1 = "LE001";
+    private final String lectureCode2 = "LE002";
+
     @Test
-    void 존재하지_않는_사용자_조회_시_NoSearchElementException_발생(){
-
+    void 존재하지_않는_사용자_조회_시_NoSearchElementException_발생() {
         // given : 존재하지 않는 사용자 세팅
-        String userCode = "1";
-
-        // when : 사용자 조회
         when(userRepository.findByUserCode(userCode)).thenReturn(null);
 
-        // then : 사용자가 존재하지 않으므로 Exception 발생
-        assertThatThrownBy(()->userService.getUserAndRegisteredLectures(userCode))
+        // when, then : 사용자가 존재하지 않으므로 Exception 발생
+        assertThatThrownBy(() -> userService.getUserAndRegisteredLectures(userCode))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("사용자를 찾을 수 없습니다.");
     }
@@ -62,30 +59,11 @@ class UserServiceTest {
     @Test
     void 사용자_조회_시_사용자_정보와_신청한_특강_목록_출력() {
         // given : 사용자 정보 + 신청한 특강 목록 설정
-        String userCode = "UC001";
         UserEntity user = new UserEntity(userCode, "김지혜");
         when(userRepository.findByUserCode(userCode)).thenReturn(user);
 
         // 강의 신청 내역 세팅
-        List<RegistrationEntity> registrations = List.of(
-                new RegistrationEntity(userCode, "LE001", RegistrationStatus.APPROVAL, LocalDateTime.parse("2024-09-30T09:00:50")),
-                new RegistrationEntity(userCode, "LE002", RegistrationStatus.APPROVAL, LocalDateTime.parse("2024-10-01T09:00:50"))
-        );
-        when(registrationRepository.findByUserCode(userCode)).thenReturn(registrations);
-
-        // 강의 상세 설정
-        LectureItemEntity lectureItem1 = new LectureItemEntity("LE001", LocalDate.now(), 30, 0);
-        LectureItemEntity lectureItem2 = new LectureItemEntity("LE002", LocalDate.now(), 30, 0);
-        when(lectureItemRepository.findByLectureItemCode("LE001")).thenReturn(lectureItem1);
-        when(lectureItemRepository.findByLectureItemCode("LE002")).thenReturn(lectureItem2);
-
-        // 강의 상세 설정
-        when(lectureRepository.findByLectureCode("LE001")).thenReturn(new LectureEntity("LE001", "JAVA", "IN001"));
-        when(lectureRepository.findByLectureCode("LE002")).thenReturn(new LectureEntity("LE002", "Spring Boot", "IN002"));
-
-        // 강사 정보 설정
-        when(instructorRepository.findByInstructorCode("IN001")).thenReturn(new InstructorEntity("IN001", "이석범"));
-        when(instructorRepository.findByInstructorCode("IN002")).thenReturn(new InstructorEntity("IN002", "렌"));
+        setupRegistrationMocks();
 
         // when : 사용자 조회 시 사용자 정보를 가지고 옴(강의 신청 목록 포함)
         UserResponseDto userDetail = userService.getUserAndRegisteredLectures(userCode);
@@ -96,20 +74,16 @@ class UserServiceTest {
         assertThat(userDetail.getRegisteredLectures())
                 .extracting("lectureCode", "instructorName")
                 .containsExactlyInAnyOrder(
-                        // tuple : 여러 값을 함께 그룹화하여 확인할 수 있게 해줌
-                        tuple("LE001", "이석범"),
-                        tuple("LE002", "렌")
+                        tuple(lectureCode1, "이석범"),
+                        tuple(lectureCode2, "렌")
                 );
     }
 
     @Test
-    void 사용자_조회_시_신청한_특강이_없는_경우_빈_목록_반환(){
+    void 사용자_조회_시_신청한_특강이_없는_경우_빈_목록_반환() {
         // given : 사용자 정보 설정
-        String userCode = "00001";
         UserEntity user = new UserEntity(userCode, "김지혜");
         when(userRepository.findByUserCode(userCode)).thenReturn(user);
-
-        // 강의 신청 내역 없음 설정
         when(registrationRepository.findByUserCode(userCode)).thenReturn(Collections.emptyList());
 
         // when : 사용자 조회(사용자 정보 + 강의 신청 정보)
@@ -118,5 +92,31 @@ class UserServiceTest {
         // then : 사용자 정보 조회, 신청한 강의 목록 비어 있음 확인
         assertThat(userDetail.getUser()).isEqualTo(user);
         assertThat(userDetail.getRegisteredLectures()).isEmpty();
+    }
+
+    private void setupRegistrationMocks() {
+        List<RegistrationEntity> registrations = List.of(
+                new RegistrationEntity(userCode, lectureCode1, RegistrationStatus.APPROVAL, LocalDateTime.parse("2024-09-30T09:00:50")),
+                new RegistrationEntity(userCode, lectureCode2, RegistrationStatus.APPROVAL, LocalDateTime.parse("2024-10-01T09:00:50"))
+        );
+        when(registrationRepository.findByUserCode(userCode)).thenReturn(registrations);
+
+        // 강의 상세 설정
+        setupLectureMocks();
+    }
+
+    private void setupLectureMocks() {
+        LectureItemEntity lectureItem1 = new LectureItemEntity(lectureCode1, lectureCode1, LocalDate.now(), 30, 0);
+        LectureItemEntity lectureItem2 = new LectureItemEntity(lectureCode2, lectureCode2, LocalDate.now(), 30, 0);
+        when(lectureItemRepository.findByLectureItemCode(lectureCode1)).thenReturn(lectureItem1);
+        when(lectureItemRepository.findByLectureItemCode(lectureCode2)).thenReturn(lectureItem2);
+
+        // 강의 상세 설정
+        when(lectureRepository.findByLectureCode(lectureCode1)).thenReturn(new LectureEntity(lectureCode1, "JAVA", "IN001"));
+        when(lectureRepository.findByLectureCode(lectureCode2)).thenReturn(new LectureEntity(lectureCode2, "Spring Boot", "IN002"));
+
+        // 강사 정보 설정
+        when(instructorRepository.findByInstructorCode("IN001")).thenReturn(new InstructorEntity("IN001", "이석범"));
+        when(instructorRepository.findByInstructorCode("IN002")).thenReturn(new InstructorEntity("IN002", "렌"));
     }
 }

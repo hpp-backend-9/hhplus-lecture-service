@@ -1,6 +1,5 @@
-package hhplus.lecture.infrastructure.persistence;
+package hhplus.lecture.domain;
 
-import hhplus.lecture.domain.model.LectureItem;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,6 +24,9 @@ public class LectureItemEntity {
     private String lectureItemCode;
 
     @Column(nullable = false)
+    private String lectureCode;
+
+    @Column(nullable = false)
     private LocalDate lectureDate; // 강의 일정 날짜
 
     @Column(nullable = false)
@@ -33,31 +35,12 @@ public class LectureItemEntity {
     @Column(nullable = false)
     private int currentCapacity = 0; // 현재 신청자 수
 
-    public LectureItemEntity(String lectureItemCode, LocalDate lectureDate, int maxCapacity, int currentCapacity) {
+    public LectureItemEntity(String lectureItemCode, String lectureCode, LocalDate lectureDate, int maxCapacity, int currentCapacity) {
         this.lectureItemCode = lectureItemCode;
+        this.lectureCode = lectureCode;
         this.lectureDate = lectureDate;
         this.maxCapacity = maxCapacity;
         this.currentCapacity = currentCapacity;
-    }
-
-    // 도메인 모델로 변환
-    public LectureItem toDomain() {
-        return new LectureItem(
-                lectureItemCode,
-                lectureDate,
-                maxCapacity,
-                currentCapacity
-        );
-    }
-
-    // 도메인 모델에서 엔티티로 변환하는 정적 메서드
-    public static LectureItemEntity fromDomain(LectureItem lectureItem) {
-        return new LectureItemEntity(
-                lectureItem.getLectureItemCode(),
-                lectureItem.getLectureDate(),
-                lectureItem.getMaxCapacity(),
-                lectureItem.getCurrentCapacity()
-        );
     }
 
     // 신청 인원 증가 (정원 확인)

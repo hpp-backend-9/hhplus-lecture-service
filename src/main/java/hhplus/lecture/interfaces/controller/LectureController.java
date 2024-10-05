@@ -1,7 +1,6 @@
 package hhplus.lecture.interfaces.controller;
 
 import hhplus.lecture.application.service.LectureService;
-import hhplus.lecture.application.service.RegistrationService;
 import hhplus.lecture.interfaces.dto.lecture.LectureDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,8 @@ public class LectureController {
     // 특강 목록 구현
     @GetMapping
     public ResponseEntity<List<LectureDto>> getLectures() {
-        List<LectureDto> lectureDtos = lectureService.getAllLectures();
-        return ResponseEntity.ok(lectureDtos);
+        List<LectureDto> lectureDto = lectureService.getAllLectures();
+        return ResponseEntity.ok(lectureDto);
     }
 
     // 신청 가능한 특강 목록
