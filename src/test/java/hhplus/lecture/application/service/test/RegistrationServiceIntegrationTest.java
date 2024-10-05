@@ -57,4 +57,34 @@ public class RegistrationServiceIntegrationTest {
         assertThat(successCount).isEqualTo(30);
         assertThat(failureCount).isEqualTo(10);
     }
+
+    @Test
+    void 동일한_유저가_같은_특강에_5번_신청할_때_1번만_성공한다() {
+        // given: 강의 세팅
+        String lectureItemCode = "LE001"; // 강의 일정 코드
+        LocalDate lectureDate = LocalDate.of(2024, 10, 3);
+
+        // 기존 강의 일정 확인
+        LectureItemEntity lectureItem = lectureItemRepository.findByLectureItemCode(lectureItemCode);
+        if (lectureItem == null) {
+            lectureItem = new LectureItemEntity(lectureItemCode, "Java", lectureDate, 30, 0);
+            lectureItemRepository.save(lectureItem);
+        }
+
+        // 동일한 사용자 코드 생성
+        String userCode = "UC001";
+
+        // 동일한 사용자로 5번 신청 진행
+        List<Boolean> results = IntStream.range(0, 5)
+                .mapToObj(i -> registrationService.registerLecture(userCode, lectureItemCode))
+                .collect(Collectors.toList());
+
+        // then: 첫 번째 신청은 성공하고 나머지 신청은 실패하는지 확인
+        long successCount = results.stream().filter(result -> result).count();
+        long failureCount = results.size() - successCount;
+
+        assertThat(successCount).isEqualTo(1);
+        assertThat(failureCount).isEqualTo(4);
+    }
+
 }
